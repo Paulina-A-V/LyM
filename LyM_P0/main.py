@@ -42,24 +42,34 @@ def parse(text, status):
         if status == 0 and current==status_tokens[0]:
             current = str()
             status = 1 
+
         elif status == 1 and current==status_tokens[1]:
             current = str()
             status = 10
             user_vars = list()
+
         elif status == 10 and current[-1] == ',':
             user_vars.append(current[:-1])
             current = str()
             status = 10 # Does nothing, just to be explicit
+
         elif status == 10 and current[-1] == ';': 
             if ';' != current:
                 user_vars.append(current[:-1])
             else:
                 if len(user_vars) != 0:
+                    #
                     raise(Exception(exceptions[10]))
+                    ## tal vez funciona sin break just in case
+                    break
             current = str()    
             status = 2
+
         elif status == 2 and current==status_tokens[2]:
-            current+=pointer
+            current = str()
+
+
+            #current+=pointer
         
         pointer += 1
     
@@ -71,6 +81,43 @@ def main():
     text = open_file(filename)
     parse(text, status)
     print('El archivo fue parseado correctamente')
+
+commandlist = ['assignto', 'goto', 'move', 'turn', 'face', 'put', 'pick', 'movetothe'
+    'moveindir', 'jumptothe', 'jumpindir', 'nop']
+
+def procdef_or_procname(listofchars):
+    procname = []
+    procdef = []
+    for char in listofchars:
+        while char != '[':
+            procname.append(char)
+            #listofchars.replace(char, '')
+    procdef = listofchars 
+    return procname, procdef
+
+print(procdef_or_procname('ana[1234,mlj]'))
+print('hola')
+
+def validcommands(commandlist, listofproc, varlist):
+    names =[]
+    name = []
+    if 'assignto' in listofproc:
+        listofproc.replace('assignto', '')
+        for character in listofproc:
+            if character != ',':
+                name.append(listofproc[0])
+            else:
+                names.append(name)
+                name = []
+    pass
+    ## todomal
+
+
+
+
+
+
+    
 
 
 if __name__ == '__main__':
