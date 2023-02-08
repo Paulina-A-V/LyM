@@ -73,5 +73,38 @@ def main():
     print('El archivo fue parseado correctamente')
 
 
-if __name__ == '__main__':
-    main()
+
+
+def prueba(text):
+    open= 0
+    closed=0
+    count=0
+
+    alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+    txt=text
+    positions= []
+    intern= []
+
+    for i in range(0,len(txt)):
+        if txt[i]=='[' and txt[i-1]==':':
+            pos_f= txt.find(']',i)
+            positions.append(i)
+            positions.append(pos_f)
+
+    while len(positions)>0:
+        zero= positions[0]
+        one= positions[1]
+        cuted= txt[zero+1:one]
+        intern.append(cuted)
+        positions= positions[2:]
+
+    if len(intern)!=0:
+        for i in intern:
+            txt= txt.replace(i,"")
+            
+    return txt, intern
+
+
+
+print(prueba("goNorth[loquesea,northdo:[moveInDir:1,north]]then:[MoveInDir:1 ,west]]"))
