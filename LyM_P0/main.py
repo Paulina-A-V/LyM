@@ -101,10 +101,10 @@ def prueba(text):
 
     if len(intern)!=0:
         for i in intern:
-            txt= txt.replace(i,"")
+            txt= txt.replace('['+i+']',"")
             
     return txt, intern
 
 
 
-print(prueba("goNorth[loquesea,northdo:[moveInDir:1,north]]then:[MoveInDir:1 ,west]]"))
+print(prueba("goWest[||if:canMoveInDir:1,westthen:[MoveInDir:1,west]else:nop:]"))
