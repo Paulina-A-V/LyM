@@ -53,13 +53,18 @@ def main():
             new= format(list)
             structure_blocks, structure_procs= filter(new)
             value= identifyprocs(structure_procs, vars)
+            value_2=isblock(structure_blocks, structure_procs, vars)
             state=4
+            v=False
+            if value and value_2:
+                v=True
+
 
         else:
             print('NO')
 
 
-    return   value
+    return   v
 
 def format(list):
 
