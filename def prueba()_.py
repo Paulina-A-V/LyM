@@ -26,7 +26,7 @@ def main():
 
     list= text.split(' ')
     #texto se vuelve lista delimitado por espacios en blanco, algunos quedan con comas o paréntesis pero eso se maneja después
-    #para probar print(list)
+
 
     state= 0
 
@@ -46,11 +46,12 @@ def main():
 
         elif state==1 and list[0]=='procs':
             state+=1
+            list.pop(0)
         #nos aseguramos que la tercera línea sea procs y pasamos a la función que analiza los procs
         elif state== 2 and list[0]=='procs':
             del list[0]
             new= format(list)
-            structure_blocks, structure_procs, positions= filter(new)
+            structure_blocks, structure_procs= filter(new)
             value= identifyprocs(structure_procs, vars)
             state=4
 
@@ -61,6 +62,8 @@ def main():
     return   value
 
 def format(list):
+
+    #permite separar los símbolos tales como ',', '[','|', ']', ':', ';' de los demás caracteres a falta de espacios en blanco
 
 
     new=[]
@@ -117,7 +120,7 @@ def filter(list):
             chnk= list[positions[i]:]
             structure_blocks.append(chnk)
 
-    return structure_blocks, structure_procs, positions
+    return structure_blocks, structure_procs
 
 def procsfunction(lst, vars, procs, value, definedprocs):
     ## vars es la lista de variables definidas
