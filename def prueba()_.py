@@ -1,4 +1,4 @@
-filename = 'correcto.txt'
+filename = input('Ingrese nombre del archivo: ')
 list_commas= [',', '[','|', ']', ':', ';']
 numbers = ['0','1', '2', '3', '4', '5', '6', '7', '8', '9']
 coordinates = ['right', 'left', 'front', 'back']
