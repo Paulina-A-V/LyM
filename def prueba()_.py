@@ -183,6 +183,8 @@ def identifyprocs(procslist, vars):
         if proc[0] in procs:
             state = True
             while len(proc) != 0:
+                #Se verifica que todo lo que siga, sea un command válido y se va comprobando que la sintaxis sea correcta
+                #según cada command enviado.
                 if proc[0] in procs and proc[1] == ':':
                     name = proc[0]
                     if name == 'assignto':
