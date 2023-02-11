@@ -17,7 +17,7 @@ def open_file(filename):
     except FileNotFoundError:
         raise Exception(f'Error: El archivo {filename} no existe')
 
-def tratemos():
+def main():
 
     text= open_file(filename)
     text= text.strip() #quita espacios en blanco al inicio y al final
@@ -564,7 +564,7 @@ def isblock(lst, procsnames, vars):
 
             
 
-print(tratemos())
+print(main())
 
 
 
