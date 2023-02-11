@@ -95,6 +95,8 @@ def format(list):
 
 def filter(list): 
 
+    #divide los bloques de procs y blocs para manipularlas después
+
     structure_blocks=[]
     structure_procs=[]
     positions=[]
