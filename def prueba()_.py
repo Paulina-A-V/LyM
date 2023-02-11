@@ -49,8 +49,8 @@ def tratemos():
         #nos aseguramos que la tercera línea sea procs y pasamos a la función que analiza los procs
         elif state== 2 and list[0]=='procs':
             del list[0]
-            new= dobby(list)
-            structure_blocks, structure_procs, positions= vaina(new)
+            new= format(list)
+            structure_blocks, structure_procs, positions= filter(new)
             value= identifyprocs(structure_procs, vars)
             state=4
 
@@ -60,7 +60,7 @@ def tratemos():
 
     return   value
 
-def dobby(list):
+def format(list):
 
 
     new=[]
@@ -85,7 +85,7 @@ def dobby(list):
          
 
 
-def vaina(list): 
+def filter(list): 
 
     structure_blocks=[]
     structure_procs=[]
