@@ -184,7 +184,7 @@ def identifyprocs(procslist, vars):
             state = True
             while len(proc) != 0:
                 #Se verifica que todo lo que siga, sea un command válido y se va comprobando que la sintaxis sea correcta
-                #según cada command enviado.
+                #según cada command enviado y todo lo que esté correcto, se va eliminando
                 if proc[0] in procs and proc[1] == ':':
                     name = proc[0]
                     if name == 'assignto':
@@ -269,7 +269,7 @@ def identifyprocs(procslist, vars):
                     
 
         elif proc[0] in controls:
-            # SI PROC[0] ES REPEAT
+            # SI PROC[0] ES REPEAT se comprueba que la sintaxis sea correcta
             if proc[0] == 'repeat' and proc[1] == ':':
                 if proc[2] not in numbers_and_vars:
                     state = False
@@ -277,7 +277,8 @@ def identifyprocs(procslist, vars):
                     del proc[0:3]
                     if isblock(proc, procsnames, vars) == False:
                         state = False
-
+            
+            #Si proc[0] es condicional o iterador, se comprueba correcta sintaxis
             if proc[0] == 'if' or proc[0] == 'while' and proc[1] == ':':
                 if proc[2] not in conditions:
                     state = False
