@@ -17,7 +17,7 @@ def open_file(filename):
     except FileNotFoundError:
         raise Exception(f'Error: El archivo {filename} no existe')
 
-def main():
+def tratemos():
 
     text= open_file(filename)
     text= text.strip() #quita espacios en blanco al inicio y al final
@@ -26,7 +26,7 @@ def main():
 
     list= text.split(' ')
     #texto se vuelve lista delimitado por espacios en blanco, algunos quedan con comas o paréntesis pero eso se maneja después
-
+    #para probar print(list)
 
     state= 0
 
@@ -46,29 +46,21 @@ def main():
 
         elif state==1 and list[0]=='procs':
             state+=1
-            list.pop(0)
         #nos aseguramos que la tercera línea sea procs y pasamos a la función que analiza los procs
         elif state== 2 and list[0]=='procs':
             del list[0]
             new= format(list)
-            structure_blocks, structure_procs= filter(new)
+            structure_blocks, structure_procs, positions= filter(new)
             value= identifyprocs(structure_procs, vars)
-            value_2=isblock(structure_blocks, structure_procs, vars)
             state=4
-            v=False
-            if value and value_2:
-                v=True
-
 
         else:
             print('NO')
 
 
-    return   v
+    return   value
 
 def format(list):
-
-    #permite separar los símbolos tales como ',', '[','|', ']', ':', ';' de los demás caracteres a falta de espacios en blanco
 
 
     new=[]
@@ -94,8 +86,6 @@ def format(list):
 
 
 def filter(list): 
-
-    #divide los bloques de procs y blocs para manipularlas después
 
     structure_blocks=[]
     structure_procs=[]
@@ -127,115 +117,7 @@ def filter(list):
             chnk= list[positions[i]:]
             structure_blocks.append(chnk)
 
-    return structure_blocks, structure_procs
-
-def procsfunction(lst, vars, procs, value, definedprocs):
-    ## vars es la lista de variables definidas
-    ## lst es la lista desde la primera instrucción hasta el último "]"
-    # procs es la lista de funciones
-    #definedprocs es un diccionario de la lista de procs que se definieron específicamente. Keys son las funciones y Values son los parámetros de cada función
-    ## inside_proc_or_block indica si está dentro de un procedimeinto o dentro de un bloque de instrucciones
-    # puede ser 'isproc' o 'isblock
-    numbers = ['0','1', '2', '3', '4', '5', '6', '7', '8', '9']
-    coordinates = ['right', 'left', 'front', 'back']
-    directions = ['north', 'south', 'east', 'west']
-    objects = ['baloons', 'chips']
-    numbers_and_vars = numbers + vars
-    allprocs = procs + list(definedprocs.keys())
-
-
-    while len(lst) != 0:
-        if lst[0] in allprocs and lst[1] == ':':
-            name = lst[0]
-            if name == 'assignto' and lst[2] in numbers and lst[3] == ',' and lst[4] in vars:
-                value = 1
-                del lst[0:5]
-                #comprobar aquí si elimina de 0 a 4 o de 0 a 5
-                if len(lst) != 0:
-                    if lst[0] != ';':
-                        value = 0
-
-            elif name == 'goto' and lst[2] in numbers_and_vars and lst[3] == ',' and lst[4] in numbers_and_vars:
-                value = 1
-                del lst[0:5]
-                if len(lst) != 0:
-                    if lst[0] != ';':
-                        value = 0
-                
-            elif name == 'move' and lst[2] in numbers_and_vars:
-                value = 1
-                del lst[0:3]
-                if len(lst) != 0:
-                    if lst[0] != ';':
-                        value = 0
-
-            elif name == 'turn' and lst[2] in coordinates:
-                value = 1
-                del lst[0:3]
-                if len(lst) != 0:
-                    if lst[0] != ';':
-                        value = 0
-
-            elif name == 'face' and lst[2] in directions:
-                value = 1
-                del lst[0:3]
-                if len(lst) != 0:
-                    if lst[0] != ';':
-                        value = 0
-
-            elif name == 'put' and lst[2] in numbers_and_vars and lst[3] == ',' and lst[4] in objects:
-                value = 1
-                del lst[0:5]
-                if len(lst) != 0:
-                    if lst[0] != ';':
-                        value = 0
-            
-            elif name == 'pick' and lst[2] in numbers_and_vars and lst[3] == ',' and lst[4] in objects:
-                values = 1
-                del lst[0:5]
-                if len(lst) != 0:
-                    if lst[0] != ';':
-                        value = 0
-            
-            elif name == 'movetothe' and lst[2] in numbers_and_vars and lst[3] == ',' and lst[4] in coordinates:
-                values = 1
-                del lst[0:5]
-                if len(lst) != 0:
-                    if lst[0] != ';':
-                        value = 0
-            
-            elif name == 'moveindir' and lst[2] in numbers_and_vars and lst[3] == ',' and lst[4] in directions:
-                values = 1
-                del lst[0:5]
-                if len(lst) != 0:
-                    if lst[0] != ';':
-                        value = 0
-            
-            elif name == 'jumptothe' and lst[2] in numbers_and_vars and lst[3] == ',' and lst[4] in coordinates:
-                values = 1
-                del lst[0:5]
-                if len(lst) != 0:
-                    if lst[0] != ';':
-                        value = 0
-
-            elif name == 'jumpindir' and lst[2] in numbers_and_vars and lst[3] == ',' and lst[4] in directions:
-                values = 1
-                del lst[0:5]
-                if len(lst) != 0:
-                    if lst[0] != ';':
-                        value = 0
-            
-            elif name == 'nop':
-                values = 1
-                del lst[0]
-                if len(lst) != 0:
-                    if lst[0] != ';':
-                        value = 0
-            
-            else:
-                values = 0
-            
-            return values
+    return structure_blocks, structure_procs, positions
 
 def identifyprocs(procslist, vars):
     # procslist es una lista de todos los procs de la función
@@ -252,22 +134,30 @@ def identifyprocs(procslist, vars):
     conditions = ['facing', 'canput', 'canpick', 'canmoveindir', 'canjumpindir', 'canmovetothe', 'canjumptothe', 'not']
 
     procsnames = []
+    #procsnames es una lista con los nombres de todos los procedures definitions
     counter = -1
     state = True
-
-    #pueden haber errores en los del con pos y con i
+    
+    #se toma como estado inicial true, es decir que el programa es correcto hasta que se prueba lo contrario
     while state is True or counter < len(procslist)-1:
         counter+=1
         proc = procslist[counter]
+        # proc representa cada procedure definition
         procsnames.append(proc[0])
         del proc[0]
+        #como cada definition empieza con su nombre, se agrega el nombre a la lista de procsnames y se elimina
+        
+        #si el primer elemento después del nombre no es [ y el último no es ], es incorrecto.
         if proc[0] != '[' or proc[-1] != ']':
             state = False
+            
+        #si las variables no están encerradas en |, es incorrecto.
         if proc.count('|') != 2:
             state = False
         pos = proc.index('|')
         del proc[0:pos+1]
-
+        
+        #se eliminan los valores hasta la primera | y se meten los nombres en la lista procsnames
         i = 0
         comma = 0
         names = 0
@@ -278,14 +168,20 @@ def identifyprocs(procslist, vars):
                 procsnames.append(proc[i])
                 names+=1
             i+=1
+         #Si hay comas adicionales, es incorrecto
+        #Se elimina todo lo que sea parámetro
         del proc[0:i+1]
         if names != comma+1:
             state = False
         
+        #Se verifica que lo siguiente que siga sea un command o un control structur
+        #En caso de no serlo, false
         if proc[0] not in procs_controls or proc[1] != ':':
             state = False
         
+        #Si está presente, se verifica que el estado sea true 
         if proc[0] in procs:
+            state = True
             while len(proc) != 0:
                 if proc[0] in procs and proc[1] == ':':
                     name = proc[0]
@@ -574,7 +470,7 @@ def isblock(lst, procsnames, vars):
 
             
 
-print(main())
+print(tratemos())
 
 
 
